@@ -16,6 +16,8 @@ package genai
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 
 	pb "cloud.google.com/go/ai/generativelanguage/apiv1/generativelanguagepb"
 )
@@ -77,6 +79,14 @@ func ImageData(format string, data []byte) Blob {
 		MIMEType: "image/" + format,
 		Data:     data,
 	}
+}
+
+func ImageDataFromPath(path string) Blob {
+	c, err := os.ReadFile(path)
+	if err != nil {
+		return Blob{}
+	}
+	return Blob{MIMEType: "image/" + filepath.Ext(path)[1:], Data: c}
 }
 
 // Ptr returns a pointer to its argument.
